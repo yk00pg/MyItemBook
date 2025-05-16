@@ -1,0 +1,17 @@
+# Gradle関連
+.gradle/
+build/
+out/
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+
+# OS関連
+.DS_Store
+
+# IDE関連
+.idea/
+*.iml
+
+# その他
+*.log
+*.class
