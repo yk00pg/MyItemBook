@@ -1,0 +1,6 @@
+name: MyItemBook
+version: '1.0-SNAPSHOT'
+main: plugin.myitembook.Main
+api-version: '1.21'
+commands:
+  itembook:
