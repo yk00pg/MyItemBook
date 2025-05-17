@@ -34,8 +34,8 @@ public class PlayerChatListener implements Listener {
   }
 
   /**
-   * <p>チャット入力を行ったプレイヤーのUUIDが入力待ちマップに格納されていたらアイテムの詳細情報の編集処理に進む。
-   * 「cancel」と入力された場合は処理を中断し、アイテムの詳細画面に戻る。
+   * プレイヤーがチャット入力した際に発火するイベント。<br> チャット入力をしたプレイヤーのUUIDが入力待ちマップに含まれている場合は、入力した内容とアイテム図鑑の設定状況を取得する。<br>
+   * 「cancel」と入力された場合は処理を中断し、アイテムの詳細画面に戻り、そうでない場合はアイテムの詳細情報を編集するメソッドを呼び出す。
    *
    * @param e イベント
    */
@@ -60,7 +60,7 @@ public class PlayerChatListener implements Listener {
     }
 
     EditItem editItem = awaitingInputMap.remove(uuid);
-    itemRegistrator.editItemBasedOnClick(
+    itemRegistrator.editItemDetailsBasedOnClick(
         editItem, player, inputContent, currentMaterial, guiSettingStatus);
   }
 }

@@ -11,9 +11,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 /**
- * アイテム詳細情報画面の編集メニューを扱うenum。
+ * アイテムの詳細画面の詳細情報の項目アイコンを扱うenum。
  */
-public enum DetailsMenu {
+public enum ItemDetailsIcon {
   DISPLAY_NAME(2, Material.PIG_SPAWN_EGG, "【表示名】", ChatColor.LIGHT_PURPLE,
       "の表示名をチャット欄に入力してください。"),
   LORE(3, Material.SHEEP_SPAWN_EGG, "【説明文】", ChatColor.LIGHT_PURPLE,
@@ -43,7 +43,7 @@ public enum DetailsMenu {
   @Getter
   private final String inputInstruction;
 
-  DetailsMenu(
+  ItemDetailsIcon(
       int slotNum, Material material, String detailsItem, ChatColor chatColor, String inputInstruction) {
 
     this.slotNum = slotNum;
@@ -54,20 +54,20 @@ public enum DetailsMenu {
   }
 
   /**
-   * 文字に色をつけた編集項目を返す。
+   * 文字の色と編集項目を取得する。
    *
-   * @return 文字に色をつけた編集項目
+   * @return 文字の色をつけた編集項目
    */
   public String getDetailsItemAndColor() {
     return chatColor + detailsItem;
   }
 
   /**
-   * 該当の詳細情報が登録済みの場合は白色で差し替えた説明文を、未登録の場合はデフォルトの色と説明文を設定する。
+   * 該当の詳細情報が登録済みの場合は白色で差し替えた説明文を、未登録の場合はデフォルトの色と説明文を取得する。
    *
    * @param registered   登録済みの場合
    * @param fallbackLore 登録済みの場合に差し替える説明文
-   * @return 説明文
+   * @return 文字の色をつけた説明文
    */
   public List<String> getDefaultLore(boolean registered, String fallbackLore) {
     return registered
@@ -76,11 +76,11 @@ public enum DetailsMenu {
   }
 
   /**
-   * 素材をアイテムスタックに変換し、表示名と説明文をつけたアイテムとして返す。
+   * 素材をアイテムスタックに変換し、表示名と説明文を設定して取得する。
    *
    * @param registered   登録済みの場合
    * @param fallbackLore 登録済みの場合に差し替える説明文
-   * @return アイテム
+   * @return 表示名と説明文を設定したアイテム（スタック）
    */
   public ItemStack toItemStack(boolean registered, String fallbackLore) {
     ItemStack item = new ItemStack(material);
@@ -95,14 +95,14 @@ public enum DetailsMenu {
   }
 
   /**
-   * 合致する素材を持った編集メニューを返す。
+   * 合致する素材を持った詳細情報の項目アイコンを取得する。
    *
    * @param material 素材
-   * @return 編集メニュー
+   * @return 詳細情報の項目アイコン
    */
-  public static Optional<DetailsMenu> fromMaterial(Material material) {
+  public static Optional<ItemDetailsIcon> getFilteredItemDetailsIcon(Material material) {
     return Arrays.stream(values())
-        .filter(detailsMenu -> detailsMenu.material == material)
+        .filter(itemDetailsIcon -> itemDetailsIcon.material == material)
         .findFirst();
   }
 }

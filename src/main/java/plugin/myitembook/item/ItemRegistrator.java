@@ -8,9 +8,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import plugin.myitembook.data.PlayerData;
 import plugin.myitembook.gui.click.EditItem;
-import plugin.myitembook.gui.management.DetailsMenu;
 import plugin.myitembook.gui.management.GuiSettingStatus;
 import plugin.myitembook.gui.management.ItemDetailsGuiManager;
+import plugin.myitembook.gui.management.ItemDetailsIcon;
 
 /**
  * アイテムの詳細情報の登録・編集を行うクラス。
@@ -59,16 +59,16 @@ public class ItemRegistrator {
    * @param currentMaterial  直前に詳細画面を開いていたアイテム
    * @param guiSettingStatus アイテム図鑑の設定状況
    */
-  public void editItemBasedOnClick(
+  public void editItemDetailsBasedOnClick(
       EditItem editItem, Player player, String inputContent,
       Material currentMaterial, GuiSettingStatus guiSettingStatus) {
 
     Material material = editItem.getMaterial();
-    DetailsMenu detailsMenu = editItem.getDetailsMenu();
+    ItemDetailsIcon itemDetailsIcon = editItem.getItemDetailsIcon();
     ItemDetails itemDetails = playerDataMap.get(player.getUniqueId()).getItemDetailsMap().get(material);
 
     boolean isCompletedRegistration = true;
-    switch (detailsMenu) {
+    switch (itemDetailsIcon) {
       case DISPLAY_NAME -> itemDetails.updateDisplayName(inputContent);
       case LORE -> itemDetails.updateLore(inputContent);
       case CATEGORY -> itemDetails.updateCategory(inputContent);
@@ -78,7 +78,7 @@ public class ItemRegistrator {
       case MEMO -> itemDetails.updateMemo(inputContent);
     }
 
-    sendRegistrationMessage(player, inputContent, isCompletedRegistration, material, detailsMenu);
+    sendRegistrationMessage(player, inputContent, isCompletedRegistration, material, itemDetailsIcon);
     itemDetailsGuiManager.reopenItemDetailsGui(player, currentMaterial, guiSettingStatus);
   }
 
@@ -89,16 +89,16 @@ public class ItemRegistrator {
    * @param inputContent            入力内容
    * @param isCompletedRegistration 登録の成否
    * @param material                登録内容を編集したアイテム
-   * @param detailsMenu             詳細情報メニュー
+   * @param itemDetailsIcon         詳細情報の項目アイコン
    */
   private void sendRegistrationMessage(
       Player player, String inputContent, boolean isCompletedRegistration,
-      Material material, DetailsMenu detailsMenu) {
+      Material material, ItemDetailsIcon itemDetailsIcon) {
 
     if (isCompletedRegistration) {
       String action = inputContent.equals("delete") ? "削除" : "登録";
       player.sendMessage(ChatColor.LIGHT_PURPLE + material.name() + ChatColor.RESET + "の"
-          + ChatColor.GOLD + detailsMenu.getDetailsItem() + ChatColor.RESET + "を"
+          + ChatColor.GOLD + itemDetailsIcon.getDetailsItem() + ChatColor.RESET + "を"
           + action + "しました。");
     }
   }

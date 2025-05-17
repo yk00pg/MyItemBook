@@ -47,10 +47,10 @@ public enum Menu {
   }
 
   /**
-   * アイコンが無効の場合はダークグレイで、そうでない場合は白色で表示名を設定する
+   * メニューの項目を取得する。<br> メニューが無効の場合はダークグレイで、そうでない場合は金色でメニュー項目を取得する。
    *
    * @param disabled 無効の場合
-   * @return 表示名
+   * @return 文字の色をつけたメニュー項目
    */
   public String getMenuItem(boolean disabled) {
     return disabled
@@ -59,12 +59,11 @@ public enum Menu {
   }
 
   /**
-   * <p>UNRELEASEDメニューの場合は、ダークグレイで説明文を設定する。
-   * 無効ならダークグレイで差し替えた説明文を、そうでない場合は白色で説明文を設定する。
+   * メニューの説明文を取得する。<br> UNRELEASEDメニューの場合は、ダークグレイで説明文を設定する。<br> その他のメニューの場合は、無効ならダークグレイで差し替えた説明文を、そうでない場合は黄色で説明文を取得する。
    *
    * @param disabled     無効の場合
    * @param fallbackLore 無効の場合に差し替える説明文
-   * @return 説明文
+   * @return 文字の色をつけた説明文
    */
   public List<String> getLore(
       boolean disabled, String fallbackLore) {
@@ -78,13 +77,12 @@ public enum Menu {
   }
 
   /**
-   * <p>PREV、NEXTメニュー用：無効ならダークグレイで差し替えた説明文を、
-   * そうでない場合は表示しているGUIに合わせた文言+説明文を白色で設定する。
+   * PREV、NEXTメニュー用の説明文を取得する。<br> メニューが無効ならダークグレイで差し替えた説明文を、そうでない場合は白色で表示している画面に合わせた文言+説明文を取得する。
    *
    * @param disabled     無効の場合
    * @param fallbackLore 無効の場合に差し替える説明文
    * @param stringByGui  表示しているGUIに合わせた文言
-   * @return 説明文
+   * @return 文字の色をつけた説明文
    */
   public List<String> getLore(
       boolean disabled, String fallbackLore, String stringByGui) {
@@ -95,45 +93,45 @@ public enum Menu {
   }
 
   /**
-   * UNRELEASEDメニュー用：素材をアイテムスタックに変換するメソッド（常に無効）を返す。
+   * UNRELEASEDメニュー用に素材をアイテムスタックに変換する。
    *
-   * @return 素材をアイテムスタックに変換するメソッド
+   * @return アイテム（スタック）
    */
-  public ItemStack toItemStack() {
+  public ItemStack convertToItemStack() {
     return createItem(true, getLore(true, ""));
   }
 
   /**
-   * 素材をアイテムスタックに変換するメソッドを返す。
+   * 素材をアイテムスタックに変換する。
    *
    * @param disabled     無効の場合
    * @param fallbackLore 無効の場合に差し替える説明文
-   * @return 素材をアイテムスタックに変換するメソッド
+   * @return アイテム（スタック）
    */
-  public ItemStack toItemStack(boolean disabled, String fallbackLore) {
+  public ItemStack convertToItemStack(boolean disabled, String fallbackLore) {
     return createItem(disabled, getLore(disabled, fallbackLore));
   }
 
   /**
-   * PREV、NEXTメニュー用：素材をアイテムスタックに変換するメソッドを返す。
+   * PREV、NEXTメニュー用に素材をアイテムスタックに変換する。
    *
    * @param disabled     無効の場合
    * @param fallbackLore 無効の場合に差し替える説明文
-   * @param stringByGui  表示しているGUIに合わせた文言
-   * @return 素材をアイテムスタックに変換するメソッド
+   * @param stringByGui  表示している画面に合わせた文言
+   * @return アイテム（スタック）
    */
-  public ItemStack toItemStack(
+  public ItemStack convertToItemStack(
       boolean disabled, String fallbackLore, String stringByGui) {
 
     return createItem(disabled, getLore(disabled, fallbackLore, stringByGui));
   }
 
   /**
-   * 素材をアイテムスタックに変換し、表示名と説明文付きのアイテムとして返す。
+   * 素材をアイテムスタックに変換し、表示名と説明文を設定して取得する。
    *
    * @param disabled 無効の場合
    * @param loreList 説明文
-   * @return 表示名と説明文付きのアイテム
+   * @return 表示名と説明文を設定したアイテム（スタック）
    */
   private ItemStack createItem(boolean disabled, List<String> loreList) {
     ItemStack item = new ItemStack(material);
@@ -153,7 +151,7 @@ public enum Menu {
    * @param material 素材
    * @return メニュー
    */
-  public static Optional<Menu> fromMaterial(Material material) {
+  public static Optional<Menu> getFilteredMenu(Material material) {
     return Arrays.stream(values())
         .filter(menu -> menu.material == material)
         .findFirst();

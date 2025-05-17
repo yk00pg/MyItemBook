@@ -23,7 +23,7 @@ import plugin.myitembook.data.PlayerData;
 import plugin.myitembook.item.ItemDetails;
 
 /**
- * アイテム図鑑GUI（一覧画面）を管理するクラス。
+ * アイテム図鑑の一覧画面を管理するクラス。
  */
 @Getter
 public class ItemBookGuiManager {
@@ -38,9 +38,8 @@ public class ItemBookGuiManager {
   }
 
   /**
-   * <p>UUIDをキーにしてプレイヤーの登録済みアイテム一覧を取得し、並び順やアイテムの数を調整する。
-   * <p>9*6のチェスト型GUIを作成し、アイテムとメニューアイコンを設置する。
-   * UUIDをキーにページ、並び順、アイテム一覧をアイテム図鑑の設定状況マップに格納し、GUIを開く。
+   * アイテム図鑑の一覧画面を開く。<br> UUIDをキーにして取得したプレイヤーデータマップからアイテムの詳細情報マップを取得する。<br> 登録済みアイテムをリスト形式に変換し、並び替えて数を調整する。<br>
+   * 9*6のチェスト型インベントリを作成し、アイテムとメニューアイコンを設置する。<br> UUIDとアイテム図鑑の設定状況（ページ、並び順、アイテムリスト）を紐付けてアイテム図鑑の設定状況マップを作成し、アイテム図鑑の一覧画面を開く。
    *
    * @param player プレイヤー
    */
@@ -65,9 +64,11 @@ public class ItemBookGuiManager {
   }
 
   /**
-   * UUIDをキーにプレイヤーの登録済みアイテム一覧を取得し、選択された並び順を基に並び替えた一覧をリスト形式で返す。
+   * アイテムの詳細情報マップのキーセットをリストに変換し、指定の並び順に並び替えて取得する。
    *
-   * @return 並び替えた登録済みアイテム一覧
+   * @param currentOrderType 指定の並び順
+   * @param itemDetailsMap   アイテムの詳細情報マップ
+   * @return 並び替えたアイテムリスト
    */
   @NotNull
   private List<Material> getAndSortItemList(
@@ -93,12 +94,11 @@ public class ItemBookGuiManager {
   }
 
   /**
-   * <p>並び替えた登録済みアイテム一覧の数をページ内に収まるように調整し、GUI用アイテム一覧をリスト形式で返す。
-   * <p>開こうとしているページからはみ出る場合は、収まる分だけリストに入れる。
-   * 開こうとしているページのスロットが余る場合は、BEDROCKで埋める。
+   * 並び替えたアイテムリストのサイズを調整して取得する。<br> 開こうとしているページからはみ出る場合は、収まる分だけリストに入れる。<br> 開こうとしているページのスロットが余る場合は、BEDROCKで埋める。<br>
    *
-   * @param sortedItemList 並び替えた登録済みアイテム一覧
-   * @return GUI用アイテム一覧
+   * @param sortedItemList 並び替えたアイテムリスト
+   * @param currentPage    現在開いているページ
+   * @return アイテムリスト
    */
   @NotNull
   private List<Material> adjustSizeOfItemList(List<Material> sortedItemList, Integer currentPage) {
@@ -117,11 +117,11 @@ public class ItemBookGuiManager {
   }
 
   /**
-   * GUI用アイテム一覧を一覧画面に設置する。
+   * アイテムを一覧画面の[0]〜[35]スロットに設置する。
    *
-   * @param itemList       GUI用アイテム一覧
-   * @param itemDetailsMap 登録済みアイテムの詳細情報一覧
-   * @param itemBookGui    一覧画面
+   * @param itemList       アイテムリスト
+   * @param itemDetailsMap アイテムの詳細情報マップ
+   * @param itemBookGui    アイテム図鑑の一覧画面
    */
   private void setItems(
       List<Material> itemList, Map<Material, ItemDetails> itemDetailsMap, Inventory itemBookGui) {
@@ -136,10 +136,9 @@ public class ItemBookGuiManager {
   }
 
   /**
-   * <p>アイテムのメタ情報を設定する。
-   * BEDROCK（未登録）と登録済みアイテムの場合に分岐して設定メソッドを呼び出す。
+   * アイテムの表示名と説明文を設定する。<br> BEDROCK（未登録）の場合と登録済みアイテムの場合に分岐して設定メソッドを呼び出す。
    *
-   * @param itemDetailsMap 登録済みアイテムの詳細情報一覧
+   * @param itemDetailsMap アイテムの詳細情報マップ
    * @param itemStack      アイテム（スタック）
    * @param material       アイテム（素材）
    */
@@ -176,9 +175,9 @@ public class ItemBookGuiManager {
   }
 
   /**
-   * <p>登録済みアイテムに表示名と説明文を設定する。
+   * 登録済みアイテムに表示名と説明文を設定する。
    *
-   * @param itemDetailsMap アイテムの詳細情報一覧
+   * @param itemDetailsMap アイテムの詳細情報マップ
    * @param itemStack      アイテム（スタック）
    * @param material       アイテム（素材）
    * @param itemMeta       アイテムのメタ情報
@@ -196,8 +195,7 @@ public class ItemBookGuiManager {
   }
 
   /**
-   * <p>登録済みアイテムに表示名を設定する。
-   * アイテムの詳細情報として登録されている場合は登録内容を、未登録の場合は「素材名（表示名未登録）」を設定する。
+   * 登録済みアイテムに表示名を設定する。<br> アイテムの詳細情報として登録されている場合は登録内容を、未登録の場合は「素材名（表示名未登録）」を設定する。
    *
    * @param material    アイテム（素材）
    * @param itemMeta    アイテムのメタ情報
@@ -214,8 +212,7 @@ public class ItemBookGuiManager {
   }
 
   /**
-   * <p>登録済みアイテムの説明文を設定する。
-   * アイテムの詳細情報として登録されている場合は登録内容を設定し、未登録の場合は何も設定しない。
+   * 登録済みアイテムの説明文を設定する。<br> アイテムの詳細情報として登録されている場合は登録内容を設定し、未登録の場合は何も設定しない。
    *
    * @param itemMeta    アイテムのメタ情報
    * @param itemDetails アイテムの詳細情報
@@ -228,9 +225,12 @@ public class ItemBookGuiManager {
   }
 
   /**
-   * 一覧画面の6行目（[45]〜[53]）にメニューアイコンを設置する。
+   * メニューアイコンを設置する。<br> 無効になり得るアイコンについては、状態を確認して表示する説明文を設定する。<br> 6行目（[45]〜[53]スロット）に順番に設置する。
    *
-   * @param itemBookGui 一覧画面
+   * @param itemBookGui      アイテム図鑑の一覧画面
+   * @param currentPage      開こうとしているページ
+   * @param sortedItemList   並び替えたアイテムリスト
+   * @param currentOrderType 指定の並び順
    */
   private void setMenuIcons(Inventory itemBookGui, Integer currentPage,
       List<Material> sortedItemList, OrderType currentOrderType) {
@@ -238,26 +238,26 @@ public class ItemBookGuiManager {
     List<ItemStack> menuIconList = new LinkedList<>();
     int endPage = (int) Math.max(0, Math.ceil((double) sortedItemList.size() / 36) - 1);
 
-    menuIconList.add(Menu.UNRELEASED.toItemStack());  // TODO: 称号付与実装後、TITLEに差し替える
-    menuIconList.add(Menu.SAVE.toItemStack(false, ""));
+    menuIconList.add(Menu.UNRELEASED.convertToItemStack());  // TODO: 称号付与実装後、TITLEに差し替える
+    menuIconList.add(Menu.SAVE.convertToItemStack(false, ""));
 
     boolean isAscOrder = currentOrderType == OrderType.ASC_ORDER;
     boolean isRegistrationOrder = currentOrderType == OrderType.REGISTRATION_ORDER;
     String fallbackLore = "現在表示している並び順です";
-    menuIconList.add(Menu.LIST.toItemStack(isAscOrder, fallbackLore));
-    menuIconList.add(Menu.SORT.toItemStack(isRegistrationOrder, fallbackLore));
+    menuIconList.add(Menu.LIST.convertToItemStack(isAscOrder, fallbackLore));
+    menuIconList.add(Menu.SORT.convertToItemStack(isRegistrationOrder, fallbackLore));
 
-    menuIconList.add(Menu.UNRELEASED.toItemStack());  // TODO: フィルター表示実装後、FILTERに差し替える
-    menuIconList.add(Menu.UNRELEASED.toItemStack());  // TODO: アイテム検索実装後、SEARCHに差し替える
+    menuIconList.add(Menu.UNRELEASED.convertToItemStack());  // TODO: フィルター表示実装後、FILTERに差し替える
+    menuIconList.add(Menu.UNRELEASED.convertToItemStack());  // TODO: アイテム検索実装後、SEARCHに差し替える
 
     boolean isFirstPage = currentPage == 0;
     boolean isLastPage = currentPage == endPage;
-    menuIconList.add(Menu.PREV.toItemStack(
+    menuIconList.add(Menu.PREV.convertToItemStack(
         isFirstPage, "これが最初のページです", "前のページ"));
-    menuIconList.add(Menu.NEXT.toItemStack(
+    menuIconList.add(Menu.NEXT.convertToItemStack(
         isLastPage, "これが最後のページです", "次のページ"));
 
-    menuIconList.add(Menu.CLOSE.toItemStack(false, ""));
+    menuIconList.add(Menu.CLOSE.convertToItemStack(false, ""));
 
     int i = 45;
     for (ItemStack menuIcon : menuIconList) {
@@ -274,7 +274,7 @@ public class ItemBookGuiManager {
    * @param currentOrderType 直前に開いていた一覧画面の並び順
    */
   public void reopenItemBookGui(Player player, int currentPage, OrderType currentOrderType) {
-    Bukkit.getScheduler().runTaskLater(main, Runnable ->
+    Bukkit.getScheduler().runTaskLater(main, () ->
             openItemBookGui(player, currentPage, currentOrderType),
         25);
   }

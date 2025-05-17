@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import plugin.myitembook.item.ItemDetails;
 
 /**
- * プレイヤーデータを扱うオブジェクト。
+ * プレイヤーデータ（アイテムの詳細情報マップ、アイテム図鑑データファイル）を扱うオブジェクト。
  */
 @Getter
 public class PlayerData {

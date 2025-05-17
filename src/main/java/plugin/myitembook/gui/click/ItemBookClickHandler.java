@@ -13,7 +13,7 @@ import plugin.myitembook.gui.management.Menu;
 import plugin.myitembook.gui.management.OrderType;
 
 /**
- * アイテム図鑑の一覧画面におけるクリックに応じた処理を行うクラス。
+ * アイテム図鑑の一覧画面におけるクリックに応じた処理を実行するクラス。
  */
 public class ItemBookClickHandler {
 
@@ -36,9 +36,8 @@ public class ItemBookClickHandler {
   }
 
   /**
-   * <p>クリックされたスロットに応じて分岐して処理を実行する。
-   * <p>45未満（登録済みアイテムが配置されたスロット）の場合は、詳細画面を表示するメソッドを呼び出す。
-   * そうでない（メニューが配置されたスロット）場合は、メニュー別処理のメソッドを呼び出す。
+   * アイテム図鑑の一覧画面におけるクリックを判定して処理を実行する。<br> クリックされたスロットの番号が45未満（登録済みアイテムが配置されたスロット）の場合は、アイテムの詳細画面を開くメソッドを呼び出す。<br>
+   * そうでない（メニューが配置されたスロット）場合は、メニュー別に処理するメソッドを呼び出す。
    *
    * @param clickedSlot      クリックされたスロット
    * @param clickedMaterial  クリックされたアイテム
@@ -72,7 +71,7 @@ public class ItemBookClickHandler {
   }
 
   /**
-   * クリックされたアイテムからメニューを判定し、処理を実行する。
+   * クリックされたアイテムからメニューを判定し、分岐して処理を実行する。
    *
    * @param guiSettingStatus アイテム図鑑の設定状況
    * @param player           クリックしたプレイヤー
@@ -84,7 +83,7 @@ public class ItemBookClickHandler {
     int currentPage = guiSettingStatus.getCurrentPage();
     OrderType currentOrderType = guiSettingStatus.getCurrentOrderType();
 
-    Menu.fromMaterial(clickedMaterial).ifPresent(
+    Menu.getFilteredMenu(clickedMaterial).ifPresent(
         menu -> {
           switch (menu) {
             case SAVE -> {

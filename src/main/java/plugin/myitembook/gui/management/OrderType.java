@@ -3,7 +3,7 @@ package plugin.myitembook.gui.management;
 import lombok.Getter;
 
 /**
- * アイテム図鑑GUIの並び順を定義するenum。
+ * アイテム図鑑GUIの並び順を扱うenum。
  */
 public enum OrderType {
 

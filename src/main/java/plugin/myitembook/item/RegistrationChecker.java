@@ -28,8 +28,7 @@ public class RegistrationChecker {
   }
 
   /**
-   * <p>入手したアイテムが登録済みか判定し、登録されていない場合は登録してメッセージを表示する。
-   * メッセージが見えるように開いているインベントリを閉じる。
+   * 入手したアイテムが登録済みか判定し、登録されていない場合は登録してメッセージを表示する。<br> メッセージが見えるように開いているインベントリを閉じる。
    *
    * @param player   アイテムを入手したプレイヤー
    * @param material 入手したアイテム（素材）
@@ -44,15 +43,14 @@ public class RegistrationChecker {
     itemRegistrator.registerItemAndItemDetails(player, material);
     sendRegistrationMessage(player, material);
 
-    Bukkit.getScheduler().runTaskLater(main, Runnable ->
-            player.closeInventory(),
-        25);
+    Bukkit.getScheduler().runTaskLater(main, player :: closeInventory, 25);
   }
 
   /**
    * アイテムの登録メッセージを表示する。
    *
-   * @param player アイテムを入手したプレイヤー
+   * @param player   アイテムを入手したプレイヤー
+   * @param material 入手したアイテム（素材）
    */
   private void sendRegistrationMessage(Player player, Material material) {
     player.sendMessage(

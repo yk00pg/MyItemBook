@@ -27,7 +27,7 @@ public class PlayerDataSaver {
   }
 
   /**
-   * UUIDをキーにしてプレイヤーのアイテム図鑑データファイルを取得し、データをYAMLファイルに書き出して上書き保存する。
+   * UUIDをキーにしてプレイヤーデータマップからアイテム図鑑データファイルを取得し、新しいアイテム図鑑データを書き出して保存する。
    *
    * @param player プレイヤー
    */
@@ -36,7 +36,6 @@ public class PlayerDataSaver {
     File playerFile = playerData.getPlayerFile();
     FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(playerFile);
 
-    playerConfig.set(YamlFields.ROOT, null);
     List<Map<String, Object>> itemBookInfoList = createItemBookInfoList(playerData);
     playerConfig.set(YamlFields.ROOT, itemBookInfoList);
 
@@ -52,9 +51,9 @@ public class PlayerDataSaver {
   }
 
   /**
-   * 登録済みアイテムの詳細情報一覧を基に、アイテム図鑑データ一覧をマップリスト形式で作り替える。
+   * アイテムの詳細情報マップを基に、アイテム図鑑データをマップリスト形式で作り替える。
    *
-   * @return 作り替えたアイテム図鑑データ一覧
+   * @return 作り替えたアイテム図鑑データマップリスト
    */
   @NotNull
   private List<Map<String, Object>> createItemBookInfoList(PlayerData playerData) {
@@ -72,11 +71,11 @@ public class PlayerDataSaver {
   }
 
   /**
-   * YAMLファイルのフィールド名をキーにして各アイテムの詳細情報一覧をマップ形式で作成する。
+   * YAMLファイルのフィールド名とアイテムの詳細情報を紐付けてアイテム図鑑データマップを作成する。
    *
    * @param material    素材
-   * @param itemDetails 登録済みアイテムの詳細情報
-   * @return 各アイテムの詳細情報一覧
+   * @param itemDetails アイテムの詳細情報
+   * @return アイテム図鑑データマップ
    */
   @NotNull
   private Map<String, Object> createItemBookInfoMap(Material material, ItemDetails itemDetails) {

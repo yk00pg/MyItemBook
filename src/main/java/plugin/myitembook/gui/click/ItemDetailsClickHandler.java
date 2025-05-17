@@ -9,15 +9,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import plugin.myitembook.data.PlayerDataSaver;
-import plugin.myitembook.gui.management.DetailsMenu;
 import plugin.myitembook.gui.management.GuiSettingStatus;
 import plugin.myitembook.gui.management.ItemBookGuiManager;
 import plugin.myitembook.gui.management.ItemDetailsGuiManager;
+import plugin.myitembook.gui.management.ItemDetailsIcon;
 import plugin.myitembook.gui.management.Menu;
 import plugin.myitembook.gui.management.OrderType;
 
 /**
- * アイテム図鑑のアイテム詳細画面におけるクリックに応じた処理をするクラス。
+ * アイテム図鑑のアイテムの詳細画面におけるクリックに応じた処理を実行するクラス。
  */
 @Getter
 public class ItemDetailsClickHandler {
@@ -39,25 +39,25 @@ public class ItemDetailsClickHandler {
   }
 
   /**
-   * <p>クリックされたスロットに応じて分岐して処理を実行する。
-   * <p>18未満（編集メニューが配置されているスロット）の場合はUUIDをキーに編集項目を入力待ちマップに格納し、チャット入力を待つ。
-   * そうでない（メニューが配置されているスロット）場合はメニュー別処理のメソッドを呼び出す。
+   * アイテム図鑑のアイテムの詳細画面におけるクリックを判定して処理を実行する。<br> クリックされたスロットの番号が18未満（編集メニューが配置されているスロット）の場合は、UUIDと編集項目を紐付けて<br> 入力待ちマップに追加し、メッセージを表示してインベントリを閉じる。<br>
+   * そうでない（メニューが配置されているスロット）場合はメニュー別に処理するメソッドを呼び出す。
    *
-   * @param clickedSlot     クリックされたスロット
-   * @param player          クリックしたプレイヤー
-   * @param clickedMaterial クリックされたアイテム
-   * @param currentMaterial 現在詳細画面を開いているアイテム
+   * @param clickedSlot      クリックされたスロット
+   * @param player           クリックしたプレイヤー
+   * @param clickedMaterial  クリックされたアイテム
+   * @param currentMaterial  現在詳細画面を開いているアイテム
+   * @param guiSettingStatus アイテム図鑑の設定状況
    */
   public void handleItemDetailsClick(
       int clickedSlot, Player player, Material clickedMaterial,
       Material currentMaterial, GuiSettingStatus guiSettingStatus) {
 
     if (clickedSlot < 18) {
-      DetailsMenu.fromMaterial(clickedMaterial).ifPresent(
-          detailsMenu -> {
-            awaitingInputMap.put(player.getUniqueId(), new EditItem(currentMaterial, detailsMenu));
+      ItemDetailsIcon.getFilteredItemDetailsIcon(clickedMaterial).ifPresent(
+          itemDetailsIcon -> {
+            awaitingInputMap.put(player.getUniqueId(), new EditItem(currentMaterial, itemDetailsIcon));
             player.sendMessage(ChatColor.LIGHT_PURPLE + currentMaterial.name()
-                + ChatColor.RESET + detailsMenu.getInputInstruction());
+                + ChatColor.RESET + itemDetailsIcon.getInputInstruction());
             player.sendMessage("登録中止は「cancel」、登録削除は「delete」と入力してください。");
             player.closeInventory();
           }
@@ -68,7 +68,7 @@ public class ItemDetailsClickHandler {
   }
 
   /**
-   * クリックされたアイテムからどのメニューかを判定し、処理を実行する。
+   * クリックされたアイテムからメニューを判定し、分岐して処理を実行する。
    *
    * @param guiSettingStatus アイテム図鑑の設定状況
    * @param player           クリックしたプレイヤー
@@ -78,15 +78,15 @@ public class ItemDetailsClickHandler {
       GuiSettingStatus guiSettingStatus, Player player, Material clickedMaterial, Material currentMaterial) {
 
     List<Material> currentItemList = guiSettingStatus.getCurrentItemList();
-    Menu.fromMaterial(clickedMaterial).ifPresent(
-        menuIcons -> {
-          switch (menuIcons) {
+    Menu.getFilteredMenu(clickedMaterial).ifPresent(
+        menu -> {
+          switch (menu) {
             case SAVE -> {
               playerDataSaver.savePlayerItemBookData(player);
               player.closeInventory();
               itemDetailsGuiManager.reopenItemDetailsGui(player, currentMaterial, guiSettingStatus);
             }
-            case LIST, SORT -> openItemBookByOrderType(menuIcons, player);
+            case LIST, SORT -> openItemBookByOrderType(menu, player);
             case PREV -> goPrevItemIfPresent(currentItemList, currentMaterial, player, guiSettingStatus);
             case NEXT -> goNextItemIfPresent(currentItemList, currentMaterial, player, guiSettingStatus);
             case BACK -> {

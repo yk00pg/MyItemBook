@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import plugin.myitembook.item.ItemDetails;
 
 /**
- * プレイヤーのアイテム図鑑データをYAMLファイルから読み込むクラス。
+ * プレイヤーのアイテム図鑑データをYAMLファイルから読み込むクラス。<br>
  */
 @Getter
 public class PlayerDataLoader {
@@ -32,9 +32,10 @@ public class PlayerDataLoader {
   }
 
   /**
-   * 参加したプレイヤーのYamlファイルを読み込み、プレイヤーデータを作成する。
+   * ログインしたプレイヤーのアイテム図鑑データファイル（YAMLファイル）を読み込む。<br> 本プラグインのデータフォルダ、データファイルの順に参照し、存在しなければ生成して取得する。<br> データファイルを読み込み、データの値を取得する。<br>
+   * UUIDとプレイヤーデータ（アイテムの詳細情報マップ、アイテム図鑑データファイル）を紐付けてプレイヤーデータマップを作成する。
    *
-   * @param player 参加したプレイヤー
+   * @param player ログインしたプレイヤー
    */
   public void loadYamlFile(Player player) {
     UUID uuid = player.getUniqueId();
@@ -56,7 +57,7 @@ public class PlayerDataLoader {
   }
 
   /**
-   * アイテム図鑑の親フォルダとなる本プラグインのデータフォルダの存在を確認し、存在しなければ生成して返す。
+   * 本プラグインのデータフォルダを参照し、存在しなければ生成して取得する。
    *
    * @return 本プラグインのデータフォルダ
    */
@@ -67,7 +68,7 @@ public class PlayerDataLoader {
         parentDir.mkdirs();
         Bukkit.getLogger().info("プラグインのデータフォルダを作成しました: " + parentDir.getPath());
       } catch (Exception ex) {
-        Bukkit.getLogger().severe("プラグインのデータフォルダに失敗しました: " + ex.getMessage());
+        Bukkit.getLogger().severe("プラグインのデータフォルダの作成に失敗しました: " + ex.getMessage());
         return null;
       }
     }
@@ -75,8 +76,10 @@ public class PlayerDataLoader {
   }
 
   /**
-   * アイテム図鑑データファイルの存在を確認し、存在しなければ生成して返す。
+   * アイテム図鑑データファイルの存在を参照し、存在しなければ生成して取得する。
    *
+   * @param parentDir 本プラグインのデータフォルダ
+   * @param uuid      ログインしたプレイヤーのUUID
    * @return アイテム図鑑データファイル
    */
   private File getOrCreateFile(File parentDir, UUID uuid) {
@@ -94,11 +97,10 @@ public class PlayerDataLoader {
   }
 
   /**
-   * <p>アイテム図鑑データをマップリスト形式で取得し、各フィールドから値を取得する。
-   * 素材をキーにしてアイテムの詳細情報を登録済みアイテムの詳細情報一覧に追加する。
+   * アイテム図鑑データをルートフィールドからマップリスト形式で取得し、各フィールドの値を取得する。<br> 素材とアイテムの詳細情報を紐付けて、アイテムの詳細情報マップに追加する。
    *
    * @param playerConfig   アイテム図鑑データ
-   * @param itemDetailsMap 登録済みアイテムの詳細情報一覧
+   * @param itemDetailsMap アイテムの詳細情報マップ
    */
   private void loadItemEntriesFromFile(
       FileConfiguration playerConfig, Map<Material, ItemDetails> itemDetailsMap) {
@@ -119,9 +121,9 @@ public class PlayerDataLoader {
   }
 
   /**
-   * 素材名が空でない場合、素材に変換して返す。
+   * 素材名が空でない場合、値を素材に変換して取得する。
    *
-   * @param itemEntry    アイテム図鑑データの値
+   * @param itemEntry    アイテム図鑑データのエントリ（フィールド名と値のマップ）
    * @param materialName 素材名
    * @return 素材
    */
@@ -135,9 +137,9 @@ public class PlayerDataLoader {
   }
 
   /**
-   * 各フィールドの値を適切な型に変換してまとめ、アイテムの詳細情報として返す。
+   * 各フィールドの値を適切な型に変換して取得し、アイテムの詳細情報としてまとめる。
    *
-   * @param itemEntry アイテム図鑑データの値
+   * @param itemEntry アイテム図鑑データのエントリ（フィールド名と値のマップ）
    * @param material  素材
    * @return アイテムの詳細情報
    */
