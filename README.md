@@ -134,4 +134,7 @@ https://github.com/user-attachments/assets/32bf0719-5c44-4dba-a34e-395e184eb3ab
 - ご感想やコメントなどがございましたら、[Xアカウント](https://x.com/yk00pg)までご連絡いただけますと幸いです
 <br/>
 
+## Appendix
+- [開発メモ](https://befitting-mandible-2e9.notion.site/My-Minecraft-1e8a8c648d1a807a8521d0ec35dd3991?source=copy_link)
+
 最後までお読みいただきありがとうございました。
