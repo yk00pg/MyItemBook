@@ -135,6 +135,8 @@ https://github.com/user-attachments/assets/32bf0719-5c44-4dba-a34e-395e184eb3ab
 <br/>
 
 ## Appendix
-- [開発メモ](https://befitting-mandible-2e9.notion.site/My-Minecraft-1e8a8c648d1a807a8521d0ec35dd3991?source=copy_link)
+- [開発メモ](https://befitting-mandible-2e9.notion.site/My-Minecraft-1e8a8c648d1a807a8521d0ec35dd3991?source=copy_link)（アイディア出しや要件定義など）
+<br/>
+<br/>
 
 最後までお読みいただきありがとうございました。
